@@ -1,7 +1,7 @@
 // Phase II here, don't require this file until you're done with Phase I
 
 class Car {
-  constructor (make, model, year, color, seats, previousOwners, owner, running) {
+  constructor (make, model, year, color, seats, previousOwners, owner, running, passengers) {
     this.make = make
     this.model = model
     this.year = year
@@ -11,6 +11,7 @@ class Car {
     this.previousOwners = []
     this.owner = 'manufacturer'
     this.running = false
+    this.passengers = passengers || []
   }
 
   // add the sell function
@@ -29,7 +30,7 @@ class Car {
     this.running = true
   }
   off () {
-      this.running = false
+    this.running = false
   }
   driveTo (destination) {
     if (this.running === true) {
@@ -39,24 +40,53 @@ class Car {
       return false
     }
   }
-  park() {
-    if(this.running === false) {
+  park () {
+    if (this.running === false) {
       console.log('PARKED!!')
       return true
     } else {
       return false
     }
   }
+  pickUp (name) {
+    if (this.running === true && this.passengers.length < this.seats - 1) {
+      console.log('driving to pick up ' + name)
+      this.passengers.push(name)
+      return true
+    } else {
+      return false
+    }
+  }
+  dropOff (name) {
+    if (this.passengers.includes(name) === true && this.running === true) {
+      var search = name
+      for (var i = 0; i < this.passengers.length; i++) {
+        if (this.passengers[i] === name) {
+          this.passengers.splice(i, 1)
+        }
+      }
+      console.log('driving to drop off '+ name)
+      return true
+    }
+  }
+  passengerCount() {
+    var numOfPassengers = this.passengers.length
+    return numOfPassengers
+  }
 }
 
-var c1 = new Car('Nissan', 'Sunny', 1989, 'Gold', 5)
-c1.paint('red')
-c1.sell('shaun')
-c1.sell('dom')
-// export the Car class //
-c1.start()
-// c1.off()
-// console.log(c1.running)
-c1.driveTo('GA')
+// var c1 = new Car('Nissan', 'Sunny', 1989, 'Gold', 5)
+// c1.start()
+// c1.pickUp('shaun')
+// c1.pickUp('brian')
+// c1.pickUp('prima')
+// c1.pickUp('shimei')
+// console.log(c1.passengers)
+// c1.dropOff('shaun')
+// c1.dropOff('prima')
+// c1.dropOff('shimei')
+// c1.dropOff('brian')
+// console.log(c1.passengers)
+// c1.passengerCount()
 module.exports = Car
 // this is required for the carTest.js to load this //
